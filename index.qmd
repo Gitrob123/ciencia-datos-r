@@ -1,13 +1,9 @@
 ---
 title: "Análisis Interactivo del Titanic"
-format:
-  html:
-    theme: cosmo
-    toc: true
-    toc-location: left
-    toc-depth: 3
-    number-sections: true
-    code-fold: true
+toc: true
+toc-depth: 3
+number-sections: true
+code-fold: true
 ---
 
 # 🚢 Análisis del Titanic con Random Forest
