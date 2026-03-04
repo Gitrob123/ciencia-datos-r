@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ciencia-datos-r</title>
+<title>Análisis Interactivo del Titanic – Ciencia de Datos con R</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,13 +77,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-adfb2833bc15652ec5881dc6381ea988.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-787e033c7b6f65c9dfccb6078e5d2d34.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "navbar",
+  "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "end",
-  "type": "overlay",
+  "panel-placement": "start",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -105,56 +105,116 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+
+<script src="site_libs/datatables-binding-0.30/datatables.js"></script>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+<link href="site_libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+
+<link href="site_libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet">
+
+<script src="site_libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+<script src="site_libs/plotly-binding-4.10.3/plotly.js"></script>
+
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
-<link rel="stylesheet" href="styles.css">
+
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
-      <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">ciencia-datos-r</span>
-    </a>
-  </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-  <span class="navbar-toggler-icon"></span>
-</button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
-<span class="menu-text">About</span></a>
-  </li>  
-</ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
-</div>
-      </div> <!-- /container-fluid -->
-    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Análisis Interactivo del Titanic</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Ciencia de Datos con R</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Análisis Interactivo del Titanic</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#análisis-del-titanic-con-random-forest" id="toc-análisis-del-titanic-con-random-forest" class="nav-link active" data-scroll-target="#análisis-del-titanic-con-random-forest"><span class="header-section-number">1</span> 🚢 Análisis del Titanic con Random Forest</a>
+  <ul class="collapse">
+  <li><a href="#cargar-librerías-y-datos" id="toc-cargar-librerías-y-datos" class="nav-link" data-scroll-target="#cargar-librerías-y-datos"><span class="header-section-number">1.1</span> 📦 1. Cargar librerías y datos</a></li>
+  <li><a href="#exploración-interactiva" id="toc-exploración-interactiva" class="nav-link" data-scroll-target="#exploración-interactiva"><span class="header-section-number">1.2</span> 📊 2. Exploración Interactiva</a>
+  <ul class="collapse">
+  <li><a href="#supervivencia-por-clase" id="toc-supervivencia-por-clase" class="nav-link" data-scroll-target="#supervivencia-por-clase"><span class="header-section-number">1.2.1</span> Supervivencia por Clase</a></li>
+  </ul></li>
+  <li><a href="#modelo-random-forest" id="toc-modelo-random-forest" class="nav-link" data-scroll-target="#modelo-random-forest"><span class="header-section-number">1.3</span> 🤖 3. Modelo Random Forest</a></li>
+  <li><a href="#importancia-de-variables" id="toc-importancia-de-variables" class="nav-link" data-scroll-target="#importancia-de-variables"><span class="header-section-number">1.4</span> 📈 4. Importancia de Variables</a></li>
+  <li><a href="#evaluación-del-modelo" id="toc-evaluación-del-modelo" class="nav-link" data-scroll-target="#evaluación-del-modelo"><span class="header-section-number">1.5</span> 🎯 5. Evaluación del Modelo</a></li>
+  <li><a href="#conclusiones" id="toc-conclusiones" class="nav-link" data-scroll-target="#conclusiones"><span class="header-section-number">1.6</span> 🧠 Conclusiones</a></li>
+  <li><a href="#tecnologías-usadas" id="toc-tecnologías-usadas" class="nav-link" data-scroll-target="#tecnologías-usadas"><span class="header-section-number">1.7</span> 🚀 Tecnologías usadas</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ciencia-datos-r</h1>
+<h1 class="title">Análisis Interactivo del Titanic</h1>
 </div>
 
 
@@ -171,16 +231,247 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This is a Quarto website.</p>
-<p>To learn more about Quarto websites visit <a href="https://quarto.org/docs/websites" class="uri">https://quarto.org/docs/websites</a>.</p>
+<section id="análisis-del-titanic-con-random-forest" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 🚢 Análisis del Titanic con Random Forest</h1>
+<p>En esta página exploramos el dataset Titanic y construimos un modelo de Machine Learning (Random Forest) para predecir la supervivencia.</p>
+<hr>
+<section id="cargar-librerías-y-datos" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="cargar-librerías-y-datos"><span class="header-section-number">1.1</span> 📦 1. Cargar librerías y datos</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.5.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'plotly'
+
+The following object is masked from 'package:ggplot2':
+
+    last_plot
+
+The following object is masked from 'package:stats':
+
+    filter
+
+The following object is masked from 'package:graphics':
+
+    layout</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>titanic <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Titanic)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>titanic <span class="ot">&lt;-</span> titanic <span class="sc">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(Freq) <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Survived =</span> <span class="fu">factor</span>(Survived),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Sex =</span> <span class="fu">factor</span>(Sex),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Class =</span> <span class="fu">factor</span>(Class),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age =</span> <span class="fu">factor</span>(Age)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(<span class="fu">head</span>(titanic, <span class="dv">20</span>),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">5</span>),</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">"Vista previa del dataset Titanic"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-c376694196693dc2f837" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-c376694196693dc2f837">{"x":{"filter":"none","vertical":false,"caption":"<caption>Vista previa del dataset Titanic<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],["3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd"],["Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male"],["Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child"],["No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Class<\/th>\n      <th>Sex<\/th>\n      <th>Age<\/th>\n      <th>Survived<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<hr>
+</section>
+<section id="exploración-interactiva" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="exploración-interactiva"><span class="header-section-number">1.2</span> 📊 2. Exploración Interactiva</h2>
+<section id="supervivencia-por-clase" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="supervivencia-por-clase"><span class="header-section-number">1.2.1</span> Supervivencia por Clase</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  titanic,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span>Class,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="sc">~</span>Survived,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"bar"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">barmode =</span> <span class="st">"stack"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Supervivencia por Clase"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Conteo"</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in RColorBrewer::brewer.pal(N, "Set2"): minimal value for n is 3, returning requested palette with 3 different levels
+
+Warning in RColorBrewer::brewer.pal(N, "Set2"): minimal value for n is 3, returning requested palette with 3 different levels</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-69c95b7f70153a693ce0" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-69c95b7f70153a693ce0">{"x":{"visdat":{"514652872ea":["function () ","plotlyVisDat"]},"cur_data":"514652872ea","attrs":{"514652872ea":{"x":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"stack","title":"Supervivencia por Clase","yaxis":{"domain":[0,1],"automargin":true,"title":"Conteo"},"xaxis":{"domain":[0,1],"automargin":true,"title":"Class","type":"category","categoryorder":"array","categoryarray":["1st","2nd","3rd","Crew"]},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","Crew","Crew","Crew"],"type":"bar","name":"No","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1st","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew"],"type":"bar","name":"Yes","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="modelo-random-forest" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="modelo-random-forest"><span class="header-section-number">1.3</span> 🤖 3. Modelo Random Forest</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'randomForest' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>randomForest 4.7-1.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Type rfNews() to see new features/changes/bug fixes.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'randomForest'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    combine</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggplot2':
+
+    margin</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>train_index <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(titanic), <span class="fl">0.7</span><span class="sc">*</span><span class="fu">nrow</span>(titanic))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> titanic[train_index, ]</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> titanic[<span class="sc">-</span>train_index, ]</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>rf_model <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  Survived <span class="sc">~</span> Class <span class="sc">+</span> Sex <span class="sc">+</span> Age,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> train,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ntree =</span> <span class="dv">200</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">importance =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>rf_model</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<pre><code>
+Call:
+ randomForest(formula = Survived ~ Class + Sex + Age, data = train,      ntree = 200, importance = TRUE) 
+               Type of random forest: classification
+                     Number of trees: 200
+No. of variables tried at each split: 1
+
+        OOB estimate of  error rate: 21.17%
+Confusion matrix:
+      No Yes class.error
+No  1030  25  0.02369668
+Yes  301 184  0.62061856</code></pre>
 </div>
 </div>
+<hr>
+</section>
+<section id="importancia-de-variables" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="importancia-de-variables"><span class="header-section-number">1.4</span> 📈 4. Importancia de Variables</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>importance_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">importance</span>(rf_model))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>importance_df<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">rownames</span>(importance_df)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  importance_df,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span>MeanDecreaseGini,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span><span class="fu">reorder</span>(Variable, MeanDecreaseGini),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"bar"</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">orientation =</span> <span class="st">"h"</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Importancia de Variables"</span>,</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Mean Decrease Gini"</span>),</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">""</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-20ad15c472083a44f90d" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-20ad15c472083a44f90d">{"x":{"visdat":{"5147947239c":["function () ","plotlyVisDat"]},"cur_data":"5147947239c","attrs":{"5147947239c":{"x":{},"y":{},"orientation":"h","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Importancia de Variables","xaxis":{"domain":[0,1],"automargin":true,"title":"Mean Decrease Gini"},"yaxis":{"domain":[0,1],"automargin":true,"title":"","type":"category","categoryorder":"array","categoryarray":["Age","Class","Sex"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[41.240593137508398,93.220592485959187,3.2013386229728824],"y":["Class","Sex","Age"],"orientation":"h","type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<hr>
+</section>
+<section id="evaluación-del-modelo" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="evaluación-del-modelo"><span class="header-section-number">1.5</span> 🎯 5. Evaluación del Modelo</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_model, <span class="at">newdata =</span> test)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>conf_matrix <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Predicho =</span> pred,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Real =</span> test<span class="sc">$</span>Survived)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(<span class="fu">as.data.frame</span>(conf_matrix),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">"Matriz de Confusión"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-787a77d715ad3ff9d583" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-787a77d715ad3ff9d583">{"x":{"filter":"none","vertical":false,"caption":"<caption>Matriz de Confusión<\/caption>","data":[["1","2","3","4"],["No","Yes","No","Yes"],["No","No","Yes","Yes"],[432,3,154,72]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Predicho<\/th>\n      <th>Real<\/th>\n      <th>Freq<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":3},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<hr>
+</section>
+<section id="conclusiones" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="conclusiones"><span class="header-section-number">1.6</span> 🧠 Conclusiones</h2>
+<ul>
+<li>Sexo y Clase son variables clave.</li>
+<li>Random Forest tiene buena capacidad predictiva.</li>
+<li>La interactividad mejora el análisis.</li>
+</ul>
+<hr>
+</section>
+<section id="tecnologías-usadas" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="tecnologías-usadas"><span class="header-section-number">1.7</span> 🚀 Tecnologías usadas</h2>
+<ul>
+<li>R</li>
+<li>Quarto</li>
+<li>Random Forest</li>
+<li>Plotly</li>
+<li>GitHub Pages</li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
