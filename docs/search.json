@@ -2,58 +2,100 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Análisis Interactivo del Titanic",
+    "title": "Random Forest en R — Clase Completa",
     "section": "",
-    "text": "En esta página exploramos el dataset Titanic y construimos un modelo de Machine Learning (Random Forest) para predecir la supervivencia.\n\n\n\n\n\nCode\nlibrary(tidyverse)\n\n\nWarning: package 'tidyverse' was built under R version 4.3.3\n\n\nWarning: package 'dplyr' was built under R version 4.3.3\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.5.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nlibrary(plotly)\n\n\n\nAttaching package: 'plotly'\n\nThe following object is masked from 'package:ggplot2':\n\n    last_plot\n\nThe following object is masked from 'package:stats':\n\n    filter\n\nThe following object is masked from 'package:graphics':\n\n    layout\n\n\nCode\nlibrary(DT)\n\ntitanic &lt;- as.data.frame(Titanic)\n\ntitanic &lt;- titanic %&gt;%\n  uncount(Freq) %&gt;%\n  mutate(\n    Survived = factor(Survived),\n    Sex = factor(Sex),\n    Class = factor(Class),\n    Age = factor(Age)\n  )\n\ndatatable(head(titanic, 20),\n          options = list(pageLength = 5),\n          caption = \"Vista previa del dataset Titanic\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\nplot_ly(\n  titanic,\n  x = ~Class,\n  color = ~Survived,\n  type = \"bar\"\n) %&gt;%\n  layout(\n    barmode = \"stack\",\n    title = \"Supervivencia por Clase\",\n    yaxis = list(title = \"Conteo\")\n  )\n\n\nWarning in RColorBrewer::brewer.pal(N, \"Set2\"): minimal value for n is 3, returning requested palette with 3 different levels\n\nWarning in RColorBrewer::brewer.pal(N, \"Set2\"): minimal value for n is 3, returning requested palette with 3 different levels\n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\nlibrary(randomForest)\n\n\nWarning: package 'randomForest' was built under R version 4.3.3\n\n\nrandomForest 4.7-1.1\n\n\nType rfNews() to see new features/changes/bug fixes.\n\n\n\nAttaching package: 'randomForest'\n\n\nThe following object is masked from 'package:dplyr':\n\n    combine\n\n\nThe following object is masked from 'package:ggplot2':\n\n    margin\n\n\nCode\nset.seed(123)\n\ntrain_index &lt;- sample(1:nrow(titanic), 0.7*nrow(titanic))\ntrain &lt;- titanic[train_index, ]\ntest  &lt;- titanic[-train_index, ]\n\nrf_model &lt;- randomForest(\n  Survived ~ Class + Sex + Age,\n  data = train,\n  ntree = 200,\n  importance = TRUE\n)\n\nrf_model\n\n\n\nCall:\n randomForest(formula = Survived ~ Class + Sex + Age, data = train,      ntree = 200, importance = TRUE) \n               Type of random forest: classification\n                     Number of trees: 200\nNo. of variables tried at each split: 1\n\n        OOB estimate of  error rate: 21.17%\nConfusion matrix:\n      No Yes class.error\nNo  1030  25  0.02369668\nYes  301 184  0.62061856\n\n\n\n\n\n\n\n\nCode\nimportance_df &lt;- as.data.frame(importance(rf_model))\nimportance_df$Variable &lt;- rownames(importance_df)\n\nplot_ly(\n  importance_df,\n  x = ~MeanDecreaseGini,\n  y = ~reorder(Variable, MeanDecreaseGini),\n  type = \"bar\",\n  orientation = \"h\"\n) %&gt;%\n  layout(\n    title = \"Importancia de Variables\",\n    xaxis = list(title = \"Mean Decrease Gini\"),\n    yaxis = list(title = \"\")\n  )\n\n\n\n\n\n\n\n\n\n\n\n\nCode\npred &lt;- predict(rf_model, newdata = test)\n\nconf_matrix &lt;- table(Predicho = pred,\n                     Real = test$Survived)\n\ndatatable(as.data.frame(conf_matrix),\n          caption = \"Matriz de Confusión\")\n\n\n\n\n\n\n\n\n\n\n\nSexo y Clase son variables clave.\nRandom Forest tiene buena capacidad predictiva.\nLa interactividad mejora el análisis.\n\n\n\n\n\n\nR\nQuarto\nRandom Forest\nPlotly\nGitHub Pages"
+    "text": "Random Forest es un algoritmo de Machine Learning supervisado basado en:\n\n🌳 Muchos árboles de decisión\n🎲 Muestreo aleatorio (bootstrap)\n🎯 Votación mayoritaria (clasificación)\n📊 Promedio (regresión)\n\nPertenece a los métodos Ensemble, es decir, combina múltiples modelos débiles para crear uno fuerte.\n\n\nPorque:\n\nReduce el overfitting de un árbol individual\nReduce la varianza\nEs robusto al ruido\nManeja muchas variables\nCalcula importancia de variables automáticamente"
   },
   {
-    "objectID": "index.html#cargar-librerías-y-datos",
-    "href": "index.html#cargar-librerías-y-datos",
-    "title": "Análisis Interactivo del Titanic",
+    "objectID": "index.html#qué-es-random-forest",
+    "href": "index.html#qué-es-random-forest",
+    "title": "Random Forest en R — Clase Completa",
     "section": "",
-    "text": "Code\nlibrary(tidyverse)\n\n\nWarning: package 'tidyverse' was built under R version 4.3.3\n\n\nWarning: package 'dplyr' was built under R version 4.3.3\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.5.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nlibrary(plotly)\n\n\n\nAttaching package: 'plotly'\n\nThe following object is masked from 'package:ggplot2':\n\n    last_plot\n\nThe following object is masked from 'package:stats':\n\n    filter\n\nThe following object is masked from 'package:graphics':\n\n    layout\n\n\nCode\nlibrary(DT)\n\ntitanic &lt;- as.data.frame(Titanic)\n\ntitanic &lt;- titanic %&gt;%\n  uncount(Freq) %&gt;%\n  mutate(\n    Survived = factor(Survived),\n    Sex = factor(Sex),\n    Class = factor(Class),\n    Age = factor(Age)\n  )\n\ndatatable(head(titanic, 20),\n          options = list(pageLength = 5),\n          caption = \"Vista previa del dataset Titanic\")"
+    "text": "Random Forest es un algoritmo de Machine Learning supervisado basado en:\n\n🌳 Muchos árboles de decisión\n🎲 Muestreo aleatorio (bootstrap)\n🎯 Votación mayoritaria (clasificación)\n📊 Promedio (regresión)\n\nPertenece a los métodos Ensemble, es decir, combina múltiples modelos débiles para crear uno fuerte.\n\n\nPorque:\n\nReduce el overfitting de un árbol individual\nReduce la varianza\nEs robusto al ruido\nManeja muchas variables\nCalcula importancia de variables automáticamente"
   },
   {
-    "objectID": "index.html#exploración-interactiva",
-    "href": "index.html#exploración-interactiva",
-    "title": "Análisis Interactivo del Titanic",
-    "section": "",
-    "text": "Code\nplot_ly(\n  titanic,\n  x = ~Class,\n  color = ~Survived,\n  type = \"bar\"\n) %&gt;%\n  layout(\n    barmode = \"stack\",\n    title = \"Supervivencia por Clase\",\n    yaxis = list(title = \"Conteo\")\n  )\n\n\nWarning in RColorBrewer::brewer.pal(N, \"Set2\"): minimal value for n is 3, returning requested palette with 3 different levels\n\nWarning in RColorBrewer::brewer.pal(N, \"Set2\"): minimal value for n is 3, returning requested palette with 3 different levels"
+    "objectID": "index.html#resumen-estadístico",
+    "href": "index.html#resumen-estadístico",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "4.1 4.1 Resumen estadístico",
+    "text": "4.1 4.1 Resumen estadístico\n\nsummary(iris)\n\n  Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   \n Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  \n 1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  \n Median :5.800   Median :3.000   Median :4.350   Median :1.300  \n Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  \n 3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  \n Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  \n       Species  \n setosa    :50  \n versicolor:50  \n virginica :50"
   },
   {
-    "objectID": "index.html#modelo-random-forest",
-    "href": "index.html#modelo-random-forest",
-    "title": "Análisis Interactivo del Titanic",
-    "section": "",
-    "text": "Code\nlibrary(randomForest)\n\n\nWarning: package 'randomForest' was built under R version 4.3.3\n\n\nrandomForest 4.7-1.1\n\n\nType rfNews() to see new features/changes/bug fixes.\n\n\n\nAttaching package: 'randomForest'\n\n\nThe following object is masked from 'package:dplyr':\n\n    combine\n\n\nThe following object is masked from 'package:ggplot2':\n\n    margin\n\n\nCode\nset.seed(123)\n\ntrain_index &lt;- sample(1:nrow(titanic), 0.7*nrow(titanic))\ntrain &lt;- titanic[train_index, ]\ntest  &lt;- titanic[-train_index, ]\n\nrf_model &lt;- randomForest(\n  Survived ~ Class + Sex + Age,\n  data = train,\n  ntree = 200,\n  importance = TRUE\n)\n\nrf_model\n\n\n\nCall:\n randomForest(formula = Survived ~ Class + Sex + Age, data = train,      ntree = 200, importance = TRUE) \n               Type of random forest: classification\n                     Number of trees: 200\nNo. of variables tried at each split: 1\n\n        OOB estimate of  error rate: 21.17%\nConfusion matrix:\n      No Yes class.error\nNo  1030  25  0.02369668\nYes  301 184  0.62061856"
+    "objectID": "index.html#distribución-por-especie",
+    "href": "index.html#distribución-por-especie",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "4.2 4.2 Distribución por especie",
+    "text": "4.2 4.2 Distribución por especie\n\nggplot(iris, aes(x = Species, fill = Species)) +\n  geom_bar() +\n  theme_minimal() +\n  ggtitle(\"Cantidad de observaciones por especie\")"
   },
   {
-    "objectID": "index.html#importancia-de-variables",
-    "href": "index.html#importancia-de-variables",
-    "title": "Análisis Interactivo del Titanic",
-    "section": "",
-    "text": "Code\nimportance_df &lt;- as.data.frame(importance(rf_model))\nimportance_df$Variable &lt;- rownames(importance_df)\n\nplot_ly(\n  importance_df,\n  x = ~MeanDecreaseGini,\n  y = ~reorder(Variable, MeanDecreaseGini),\n  type = \"bar\",\n  orientation = \"h\"\n) %&gt;%\n  layout(\n    title = \"Importancia de Variables\",\n    xaxis = list(title = \"Mean Decrease Gini\"),\n    yaxis = list(title = \"\")\n  )"
+    "objectID": "index.html#matriz-de-correlación",
+    "href": "index.html#matriz-de-correlación",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "4.3 4.3 Matriz de correlación",
+    "text": "4.3 4.3 Matriz de correlación\n\ncor_matrix &lt;- cor(iris[,1:4])\ncorrplot(cor_matrix, method = \"color\", addCoef.col = \"black\")\n\n\n\n\n\n\n\n\nObservación: Petal.Length y Petal.Width están fuertemente correlacionadas."
   },
   {
-    "objectID": "index.html#evaluación-del-modelo",
-    "href": "index.html#evaluación-del-modelo",
-    "title": "Análisis Interactivo del Titanic",
-    "section": "",
-    "text": "Code\npred &lt;- predict(rf_model, newdata = test)\n\nconf_matrix &lt;- table(Predicho = pred,\n                     Real = test$Survived)\n\ndatatable(as.data.frame(conf_matrix),\n          caption = \"Matriz de Confusión\")"
+    "objectID": "index.html#predicciones",
+    "href": "index.html#predicciones",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "7.1 7.1 Predicciones",
+    "text": "7.1 7.1 Predicciones\n\npredicciones &lt;- predict(modelo_rf, test)"
   },
   {
-    "objectID": "index.html#conclusiones",
-    "href": "index.html#conclusiones",
-    "title": "Análisis Interactivo del Titanic",
-    "section": "",
-    "text": "Sexo y Clase son variables clave.\nRandom Forest tiene buena capacidad predictiva.\nLa interactividad mejora el análisis."
+    "objectID": "index.html#matriz-de-confusión",
+    "href": "index.html#matriz-de-confusión",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "7.2 7.2 Matriz de confusión",
+    "text": "7.2 7.2 Matriz de confusión\n\nconfusionMatrix(predicciones, test$Species)\n\nConfusion Matrix and Statistics\n\n            Reference\nPrediction   setosa versicolor virginica\n  setosa         15          0         0\n  versicolor      0         14         2\n  virginica       0          1        13\n\nOverall Statistics\n                                         \n               Accuracy : 0.9333         \n                 95% CI : (0.8173, 0.986)\n    No Information Rate : 0.3333         \n    P-Value [Acc &gt; NIR] : &lt; 2.2e-16      \n                                         \n                  Kappa : 0.9            \n                                         \n Mcnemar's Test P-Value : NA             \n\nStatistics by Class:\n\n                     Class: setosa Class: versicolor Class: virginica\nSensitivity                 1.0000            0.9333           0.8667\nSpecificity                 1.0000            0.9333           0.9667\nPos Pred Value              1.0000            0.8750           0.9286\nNeg Pred Value              1.0000            0.9655           0.9355\nPrevalence                  0.3333            0.3333           0.3333\nDetection Rate              0.3333            0.3111           0.2889\nDetection Prevalence        0.3333            0.3556           0.3111\nBalanced Accuracy           1.0000            0.9333           0.9167\n\n\nAquí evaluamos:\n\nAccuracy\nSensitivity\nSpecificity"
   },
   {
-    "objectID": "index.html#tecnologías-usadas",
-    "href": "index.html#tecnologías-usadas",
-    "title": "Análisis Interactivo del Titanic",
-    "section": "",
-    "text": "R\nQuarto\nRandom Forest\nPlotly\nGitHub Pages"
+    "objectID": "index.html#tabla-de-importancia",
+    "href": "index.html#tabla-de-importancia",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "9.1 9.1 Tabla de importancia",
+    "text": "9.1 9.1 Tabla de importancia\n\nimportance(modelo_rf)\n\n                setosa versicolor virginica MeanDecreaseAccuracy\nSepal.Length  6.934691   7.991074  8.118161            11.088007\nSepal.Width   4.949919   3.261623  4.293208             6.698262\nPetal.Length 21.523980  29.644416 26.019695            31.678495\nPetal.Width  21.194179  28.535273 30.471520            32.587023\n             MeanDecreaseGini\nSepal.Length         8.150335\nSepal.Width          1.582668\nPetal.Length        29.994713\nPetal.Width         29.579208"
+  },
+  {
+    "objectID": "index.html#gráfico-de-importancia",
+    "href": "index.html#gráfico-de-importancia",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "9.2 9.2 Gráfico de importancia",
+    "text": "9.2 9.2 Gráfico de importancia\n\nvarImpPlot(modelo_rf,\n           main = \"Importancia de Variables\")\n\n\n\n\n\n\n\n\nInterpretación:\nLas variables más importantes para clasificar especies son:\n\nPetal.Length\nPetal.Width"
+  },
+  {
+    "objectID": "index.html#paso-1-bootstrap",
+    "href": "index.html#paso-1-bootstrap",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "11.1 Paso 1: Bootstrap",
+    "text": "11.1 Paso 1: Bootstrap\nCada árbol usa una muestra aleatoria con reemplazo."
+  },
+  {
+    "objectID": "index.html#paso-2-selección-aleatoria-de-variables",
+    "href": "index.html#paso-2-selección-aleatoria-de-variables",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "11.2 Paso 2: Selección aleatoria de variables",
+    "text": "11.2 Paso 2: Selección aleatoria de variables\nEn cada nodo:\n\nSe eligen aleatoriamente mtry variables\nSe busca la mejor división entre esas"
+  },
+  {
+    "objectID": "index.html#paso-3-votación",
+    "href": "index.html#paso-3-votación",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "11.3 Paso 3: Votación",
+    "text": "11.3 Paso 3: Votación\nClasificación: - Gana la clase con más votos\nRegresión: - Se promedian los valores"
+  },
+  {
+    "objectID": "index.html#ventajas",
+    "href": "index.html#ventajas",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "12.1 Ventajas",
+    "text": "12.1 Ventajas\n✔ Alta precisión\n✔ Maneja datos no lineales\n✔ No requiere normalización\n✔ Calcula importancia"
+  },
+  {
+    "objectID": "index.html#desventajas",
+    "href": "index.html#desventajas",
+    "title": "Random Forest en R — Clase Completa",
+    "section": "12.2 Desventajas",
+    "text": "12.2 Desventajas\n✘ Puede ser más lento\n✘ Menos interpretable que un árbol simple"
   },
   {
     "objectID": "about.html",

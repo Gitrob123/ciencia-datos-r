@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Análisis Interactivo del Titanic – ciencia-datos-r</title>
+<title>Random Forest en R — Clase Completa – ciencia-datos-r</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -105,34 +105,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
-
-<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-
-<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
-
-<script src="site_libs/datatables-binding-0.30/datatables.js"></script>
-
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-
-<link href="site_libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
-
-<link href="site_libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet">
-
-<script src="site_libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
-
-<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
-
-<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-
-<script src="site_libs/plotly-binding-4.10.3/plotly.js"></script>
-
-<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
-
-<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
-
-<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
-
 
 
 </head>
@@ -178,19 +150,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#análisis-del-titanic-con-random-forest" id="toc-análisis-del-titanic-con-random-forest" class="nav-link active" data-scroll-target="#análisis-del-titanic-con-random-forest"><span class="header-section-number">1</span> 🚢 Análisis del Titanic con Random Forest</a>
+  <li><a href="#random-forest-en-r" id="toc-random-forest-en-r" class="nav-link active" data-scroll-target="#random-forest-en-r"><span class="header-section-number">1</span> 🌲 Random Forest en R</a>
   <ul class="collapse">
-  <li><a href="#cargar-librerías-y-datos" id="toc-cargar-librerías-y-datos" class="nav-link" data-scroll-target="#cargar-librerías-y-datos"><span class="header-section-number">1.1</span> 📦 1. Cargar librerías y datos</a></li>
-  <li><a href="#exploración-interactiva" id="toc-exploración-interactiva" class="nav-link" data-scroll-target="#exploración-interactiva"><span class="header-section-number">1.2</span> 📊 2. Exploración Interactiva</a>
+  <li><a href="#qué-es-random-forest" id="toc-qué-es-random-forest" class="nav-link" data-scroll-target="#qué-es-random-forest"><span class="header-section-number">1.1</span> 1️⃣ ¿Qué es Random Forest?</a>
   <ul class="collapse">
-  <li><a href="#supervivencia-por-clase" id="toc-supervivencia-por-clase" class="nav-link" data-scroll-target="#supervivencia-por-clase"><span class="header-section-number">1.2.1</span> Supervivencia por Clase</a></li>
+  <li><a href="#por-qué-funciona-tan-bien" id="toc-por-qué-funciona-tan-bien" class="nav-link" data-scroll-target="#por-qué-funciona-tan-bien"><span class="header-section-number">1.1.1</span> ¿Por qué funciona tan bien?</a></li>
   </ul></li>
-  <li><a href="#modelo-random-forest" id="toc-modelo-random-forest" class="nav-link" data-scroll-target="#modelo-random-forest"><span class="header-section-number">1.3</span> 🤖 3. Modelo Random Forest</a></li>
-  <li><a href="#importancia-de-variables" id="toc-importancia-de-variables" class="nav-link" data-scroll-target="#importancia-de-variables"><span class="header-section-number">1.4</span> 📈 4. Importancia de Variables</a></li>
-  <li><a href="#evaluación-del-modelo" id="toc-evaluación-del-modelo" class="nav-link" data-scroll-target="#evaluación-del-modelo"><span class="header-section-number">1.5</span> 🎯 5. Evaluación del Modelo</a></li>
-  <li><a href="#conclusiones" id="toc-conclusiones" class="nav-link" data-scroll-target="#conclusiones"><span class="header-section-number">1.6</span> 🧠 Conclusiones</a></li>
-  <li><a href="#tecnologías-usadas" id="toc-tecnologías-usadas" class="nav-link" data-scroll-target="#tecnologías-usadas"><span class="header-section-number">1.7</span> 🚀 Tecnologías usadas</a></li>
   </ul></li>
+  <li><a href="#librerías-necesarias" id="toc-librerías-necesarias" class="nav-link" data-scroll-target="#librerías-necesarias"><span class="header-section-number">2</span> 2️⃣ Librerías necesarias</a></li>
+  <li><a href="#dataset-iris" id="toc-dataset-iris" class="nav-link" data-scroll-target="#dataset-iris"><span class="header-section-number">3</span> 3️⃣ Dataset: Iris</a></li>
+  <li><a href="#exploración-de-datos" id="toc-exploración-de-datos" class="nav-link" data-scroll-target="#exploración-de-datos"><span class="header-section-number">4</span> 4️⃣ Exploración de datos</a>
+  <ul class="collapse">
+  <li><a href="#resumen-estadístico" id="toc-resumen-estadístico" class="nav-link" data-scroll-target="#resumen-estadístico"><span class="header-section-number">4.1</span> 4.1 Resumen estadístico</a></li>
+  <li><a href="#distribución-por-especie" id="toc-distribución-por-especie" class="nav-link" data-scroll-target="#distribución-por-especie"><span class="header-section-number">4.2</span> 4.2 Distribución por especie</a></li>
+  <li><a href="#matriz-de-correlación" id="toc-matriz-de-correlación" class="nav-link" data-scroll-target="#matriz-de-correlación"><span class="header-section-number">4.3</span> 4.3 Matriz de correlación</a></li>
+  </ul></li>
+  <li><a href="#división-entrenamiento-y-prueba" id="toc-división-entrenamiento-y-prueba" class="nav-link" data-scroll-target="#división-entrenamiento-y-prueba"><span class="header-section-number">5</span> 5️⃣ División entrenamiento y prueba</a></li>
+  <li><a href="#entrenamiento-del-modelo-random-forest" id="toc-entrenamiento-del-modelo-random-forest" class="nav-link" data-scroll-target="#entrenamiento-del-modelo-random-forest"><span class="header-section-number">6</span> 6️⃣ Entrenamiento del modelo Random Forest</a>
+  <ul class="collapse">
+  <li><a href="#parámetros-importantes" id="toc-parámetros-importantes" class="nav-link" data-scroll-target="#parámetros-importantes"><span class="header-section-number">6.0.1</span> Parámetros importantes</a></li>
+  </ul></li>
+  <li><a href="#evaluación-del-modelo" id="toc-evaluación-del-modelo" class="nav-link" data-scroll-target="#evaluación-del-modelo"><span class="header-section-number">7</span> 7️⃣ Evaluación del modelo</a>
+  <ul class="collapse">
+  <li><a href="#predicciones" id="toc-predicciones" class="nav-link" data-scroll-target="#predicciones"><span class="header-section-number">7.1</span> 7.1 Predicciones</a></li>
+  <li><a href="#matriz-de-confusión" id="toc-matriz-de-confusión" class="nav-link" data-scroll-target="#matriz-de-confusión"><span class="header-section-number">7.2</span> 7.2 Matriz de confusión</a></li>
+  </ul></li>
+  <li><a href="#visualización-del-error-oob" id="toc-visualización-del-error-oob" class="nav-link" data-scroll-target="#visualización-del-error-oob"><span class="header-section-number">8</span> 8️⃣ Visualización del error OOB</a></li>
+  <li><a href="#importancia-de-variables" id="toc-importancia-de-variables" class="nav-link" data-scroll-target="#importancia-de-variables"><span class="header-section-number">9</span> 9️⃣ Importancia de variables</a>
+  <ul class="collapse">
+  <li><a href="#tabla-de-importancia" id="toc-tabla-de-importancia" class="nav-link" data-scroll-target="#tabla-de-importancia"><span class="header-section-number">9.1</span> 9.1 Tabla de importancia</a></li>
+  <li><a href="#gráfico-de-importancia" id="toc-gráfico-de-importancia" class="nav-link" data-scroll-target="#gráfico-de-importancia"><span class="header-section-number">9.2</span> 9.2 Gráfico de importancia</a></li>
+  </ul></li>
+  <li><a href="#visualización-de-fronteras-de-decisión" id="toc-visualización-de-fronteras-de-decisión" class="nav-link" data-scroll-target="#visualización-de-fronteras-de-decisión"><span class="header-section-number">10</span> 🔟 Visualización de fronteras de decisión</a></li>
+  <li><a href="#cómo-funciona-internamente" id="toc-cómo-funciona-internamente" class="nav-link" data-scroll-target="#cómo-funciona-internamente"><span class="header-section-number">11</span> 1️⃣1️⃣ ¿Cómo funciona internamente?</a>
+  <ul class="collapse">
+  <li><a href="#paso-1-bootstrap" id="toc-paso-1-bootstrap" class="nav-link" data-scroll-target="#paso-1-bootstrap"><span class="header-section-number">11.1</span> Paso 1: Bootstrap</a></li>
+  <li><a href="#paso-2-selección-aleatoria-de-variables" id="toc-paso-2-selección-aleatoria-de-variables" class="nav-link" data-scroll-target="#paso-2-selección-aleatoria-de-variables"><span class="header-section-number">11.2</span> Paso 2: Selección aleatoria de variables</a></li>
+  <li><a href="#paso-3-votación" id="toc-paso-3-votación" class="nav-link" data-scroll-target="#paso-3-votación"><span class="header-section-number">11.3</span> Paso 3: Votación</a></li>
+  </ul></li>
+  <li><a href="#ventajas-y-desventajas" id="toc-ventajas-y-desventajas" class="nav-link" data-scroll-target="#ventajas-y-desventajas"><span class="header-section-number">12</span> 1️⃣2️⃣ Ventajas y desventajas</a>
+  <ul class="collapse">
+  <li><a href="#ventajas" id="toc-ventajas" class="nav-link" data-scroll-target="#ventajas"><span class="header-section-number">12.1</span> Ventajas</a></li>
+  <li><a href="#desventajas" id="toc-desventajas" class="nav-link" data-scroll-target="#desventajas"><span class="header-section-number">12.2</span> Desventajas</a></li>
+  </ul></li>
+  <li><a href="#comparación-con-árbol-de-decisión" id="toc-comparación-con-árbol-de-decisión" class="nav-link" data-scroll-target="#comparación-con-árbol-de-decisión"><span class="header-section-number">13</span> 1️⃣3️⃣ Comparación con Árbol de Decisión</a></li>
+  <li><a href="#ejemplo-con-más-árboles" id="toc-ejemplo-con-más-árboles" class="nav-link" data-scroll-target="#ejemplo-con-más-árboles"><span class="header-section-number">14</span> 1️⃣4️⃣ Ejemplo con más árboles</a></li>
+  <li><a href="#aplicaciones-reales" id="toc-aplicaciones-reales" class="nav-link" data-scroll-target="#aplicaciones-reales"><span class="header-section-number">15</span> 1️⃣5️⃣ Aplicaciones reales</a></li>
+  <li><a href="#resumen-final" id="toc-resumen-final" class="nav-link" data-scroll-target="#resumen-final"><span class="header-section-number">16</span> 1️⃣6️⃣ Resumen Final</a></li>
+  <li><a href="#próxima-clase" id="toc-próxima-clase" class="nav-link" data-scroll-target="#próxima-clase"><span class="header-section-number">17</span> 📌 Próxima clase</a></li>
   </ul>
 </nav>
     </div>
@@ -199,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Análisis Interactivo del Titanic</h1>
+<h1 class="title">Random Forest en R — Clase Completa</h1>
 </div>
 
 
@@ -216,120 +223,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="análisis-del-titanic-con-random-forest" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> 🚢 Análisis del Titanic con Random Forest</h1>
-<p>En esta página exploramos el dataset Titanic y construimos un modelo de Machine Learning (Random Forest) para predecir la supervivencia.</p>
-<hr>
-<section id="cargar-librerías-y-datos" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="cargar-librerías-y-datos"><span class="header-section-number">1.1</span> 📦 1. Cargar librerías y datos</h2>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'tidyverse' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'dplyr' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.5.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-✔ purrr     1.0.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'plotly'
-
-The following object is masked from 'package:ggplot2':
-
-    last_plot
-
-The following object is masked from 'package:stats':
-
-    filter
-
-The following object is masked from 'package:graphics':
-
-    layout</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>titanic <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Titanic)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>titanic <span class="ot">&lt;-</span> titanic <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(Freq) <span class="sc">%&gt;%</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Survived =</span> <span class="fu">factor</span>(Survived),</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Sex =</span> <span class="fu">factor</span>(Sex),</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Class =</span> <span class="fu">factor</span>(Class),</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age =</span> <span class="fu">factor</span>(Age)</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(<span class="fu">head</span>(titanic, <span class="dv">20</span>),</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">5</span>),</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">"Vista previa del dataset Titanic"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-7f210c8ce8c861d53348" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-7f210c8ce8c861d53348">{"x":{"filter":"none","vertical":false,"caption":"<caption>Vista previa del dataset Titanic<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],["3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd"],["Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male","Male"],["Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child","Child"],["No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Class<\/th>\n      <th>Sex<\/th>\n      <th>Age<\/th>\n      <th>Survived<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
-<hr>
-</section>
-<section id="exploración-interactiva" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="exploración-interactiva"><span class="header-section-number">1.2</span> 📊 2. Exploración Interactiva</h2>
-<section id="supervivencia-por-clase" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="supervivencia-por-clase"><span class="header-section-number">1.2.1</span> Supervivencia por Clase</h3>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  titanic,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span>Class,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="sc">~</span>Survived,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"bar"</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">barmode =</span> <span class="st">"stack"</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Supervivencia por Clase"</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Conteo"</span>)</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in RColorBrewer::brewer.pal(N, "Set2"): minimal value for n is 3, returning requested palette with 3 different levels
-
-Warning in RColorBrewer::brewer.pal(N, "Set2"): minimal value for n is 3, returning requested palette with 3 different levels</code></pre>
-</div>
-<div class="cell-output-display">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-da6b1f226f442ffbbb4c" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-da6b1f226f442ffbbb4c">{"x":{"visdat":{"3bb8684e4627":["function () ","plotlyVisDat"]},"cur_data":"3bb8684e4627","attrs":{"3bb8684e4627":{"x":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"stack","title":"Supervivencia por Clase","yaxis":{"domain":[0,1],"automargin":true,"title":"Conteo"},"xaxis":{"domain":[0,1],"automargin":true,"title":"Class","type":"category","categoryorder":"array","categoryarray":["1st","2nd","3rd","Crew"]},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","Crew","Crew","Crew"],"type":"bar","name":"No","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1st","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","1st","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","2nd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","3rd","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew","Crew"],"type":"bar","name":"Yes","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
+<section id="random-forest-en-r" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 🌲 Random Forest en R</h1>
+<section id="qué-es-random-forest" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="qué-es-random-forest"><span class="header-section-number">1.1</span> 1️⃣ ¿Qué es Random Forest?</h2>
+<p>Random Forest es un algoritmo de <strong>Machine Learning supervisado</strong> basado en:</p>
+<ul>
+<li>🌳 Muchos árboles de decisión</li>
+<li>🎲 Muestreo aleatorio (bootstrap)</li>
+<li>🎯 Votación mayoritaria (clasificación)</li>
+<li>📊 Promedio (regresión)</li>
+</ul>
+<p>Pertenece a los métodos <strong>Ensemble</strong>, es decir, combina múltiples modelos débiles para crear uno fuerte.</p>
+<section id="por-qué-funciona-tan-bien" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="por-qué-funciona-tan-bien"><span class="header-section-number">1.1.1</span> ¿Por qué funciona tan bien?</h3>
+<p>Porque:</p>
+<ul>
+<li>Reduce el <strong>overfitting</strong> de un árbol individual</li>
+<li>Reduce la <strong>varianza</strong></li>
+<li>Es robusto al ruido</li>
+<li>Maneja muchas variables</li>
+<li>Calcula importancia de variables automáticamente</li>
+</ul>
 <hr>
 </section>
 </section>
-<section id="modelo-random-forest" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="modelo-random-forest"><span class="header-section-number">1.3</span> 🤖 3. Modelo Random Forest</h2>
+</section>
+<section id="librerías-necesarias" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> 2️⃣ Librerías necesarias</h1>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalación (solo una vez)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("randomForest")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("caret")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ggplot2")</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("corrplot")</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: package 'randomForest' was built under R version 4.3.3</code></pre>
 </div>
@@ -339,123 +268,417 @@ Warning in RColorBrewer::brewer.pal(N, "Set2"): minimal value for n is 3, return
 <div class="cell-output cell-output-stderr">
 <pre><code>Type rfNews() to see new features/changes/bug fixes.</code></pre>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'caret' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
-Attaching package: 'randomForest'</code></pre>
+Attaching package: 'ggplot2'</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:dplyr':
-
-    combine</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:ggplot2':
+<pre><code>The following object is masked from 'package:randomForest':
 
     margin</code></pre>
 </div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>train_index <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(titanic), <span class="fl">0.7</span><span class="sc">*</span><span class="fu">nrow</span>(titanic))</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> titanic[train_index, ]</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> titanic[<span class="sc">-</span>train_index, ]</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>rf_model <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  Survived <span class="sc">~</span> Class <span class="sc">+</span> Sex <span class="sc">+</span> Age,</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> train,</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ntree =</span> <span class="dv">200</span>,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">importance =</span> <span class="cn">TRUE</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>rf_model</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>corrplot 0.92 loaded</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="dataset-iris" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> 3️⃣ Dataset: Iris</h1>
+<p>Usaremos el dataset clásico <code>iris</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(iris)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(iris)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa</code></pre>
+</div>
+</div>
+<p>Variables:</p>
+<ul>
+<li>Sepal.Length</li>
+<li>Sepal.Width</li>
+<li>Petal.Length</li>
+<li>Petal.Width</li>
+<li>Species (variable objetivo)</li>
+</ul>
+<hr>
+</section>
+<section id="exploración-de-datos" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> 4️⃣ Exploración de datos</h1>
+<section id="resumen-estadístico" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="resumen-estadístico"><span class="header-section-number">4.1</span> 4.1 Resumen estadístico</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iris)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
+ Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
+ 1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
+ Median :5.800   Median :3.000   Median :4.350   Median :1.300  
+ Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
+ 3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
+ Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
+       Species  
+ setosa    :50  
+ versicolor:50  
+ virginica :50  
+                
+                
+                </code></pre>
+</div>
+</div>
+</section>
+<section id="distribución-por-especie" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="distribución-por-especie"><span class="header-section-number">4.2</span> 4.2 Distribución por especie</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">fill =</span> Species)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Cantidad de observaciones por especie"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="matriz-de-correlación" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="matriz-de-correlación"><span class="header-section-number">4.3</span> 4.3 Matriz de correlación</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(iris[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(cor_matrix, <span class="at">method =</span> <span class="st">"color"</span>, <span class="at">addCoef.col =</span> <span class="st">"black"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Observación: Petal.Length y Petal.Width están fuertemente correlacionadas.</p>
+<hr>
+</section>
+</section>
+<section id="división-entrenamiento-y-prueba" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> 5️⃣ División entrenamiento y prueba</h1>
+<p>Dividimos en 70% entrenamiento y 30% prueba.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(iris<span class="sc">$</span>Species, </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">p =</span> <span class="fl">0.7</span>, </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> iris[trainIndex, ]</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> iris[<span class="sc">-</span>trainIndex, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+</section>
+<section id="entrenamiento-del-modelo-random-forest" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> 6️⃣ Entrenamiento del modelo Random Forest</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>modelo_rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Species <span class="sc">~</span> ., </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> train,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">ntree =</span> <span class="dv">500</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">mtry =</span> <span class="dv">2</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>modelo_rf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
- randomForest(formula = Survived ~ Class + Sex + Age, data = train,      ntree = 200, importance = TRUE) 
+ randomForest(formula = Species ~ ., data = train, ntree = 500,      mtry = 2, importance = TRUE) 
                Type of random forest: classification
-                     Number of trees: 200
-No. of variables tried at each split: 1
+                     Number of trees: 500
+No. of variables tried at each split: 2
 
-        OOB estimate of  error rate: 21.17%
+        OOB estimate of  error rate: 4.76%
 Confusion matrix:
-      No Yes class.error
-No  1030  25  0.02369668
-Yes  301 184  0.62061856</code></pre>
+           setosa versicolor virginica class.error
+setosa         35          0         0  0.00000000
+versicolor      0         33         2  0.05714286
+virginica       0          3        32  0.08571429</code></pre>
 </div>
 </div>
-<hr>
-</section>
-<section id="importancia-de-variables" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="importancia-de-variables"><span class="header-section-number">1.4</span> 📈 4. Importancia de Variables</h2>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>importance_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">importance</span>(rf_model))</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>importance_df<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">rownames</span>(importance_df)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  importance_df,</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span>MeanDecreaseGini,</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span><span class="fu">reorder</span>(Variable, MeanDecreaseGini),</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"bar"</span>,</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">orientation =</span> <span class="st">"h"</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Importancia de Variables"</span>,</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Mean Decrease Gini"</span>),</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">""</span>)</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output-display">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-4dc45b5a0975c94f6d36" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-4dc45b5a0975c94f6d36">{"x":{"visdat":{"3bb84cd216fd":["function () ","plotlyVisDat"]},"cur_data":"3bb84cd216fd","attrs":{"3bb84cd216fd":{"x":{},"y":{},"orientation":"h","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Importancia de Variables","xaxis":{"domain":[0,1],"automargin":true,"title":"Mean Decrease Gini"},"yaxis":{"domain":[0,1],"automargin":true,"title":"","type":"category","categoryorder":"array","categoryarray":["Age","Class","Sex"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[41.240593137508398,93.220592485959187,3.2013386229728824],"y":["Class","Sex","Age"],"orientation":"h","type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
-<hr>
-</section>
-<section id="evaluación-del-modelo" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="evaluación-del-modelo"><span class="header-section-number">1.5</span> 🎯 5. Evaluación del Modelo</h2>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_model, <span class="at">newdata =</span> test)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>conf_matrix <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Predicho =</span> pred,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Real =</span> test<span class="sc">$</span>Survived)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(<span class="fu">as.data.frame</span>(conf_matrix),</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">"Matriz de Confusión"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-ffbb5bbf4929e13ec3d2" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-ffbb5bbf4929e13ec3d2">{"x":{"filter":"none","vertical":false,"caption":"<caption>Matriz de Confusión<\/caption>","data":[["1","2","3","4"],["No","Yes","No","Yes"],["No","No","Yes","Yes"],[432,3,154,72]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Predicho<\/th>\n      <th>Real<\/th>\n      <th>Freq<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":3},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
-<hr>
-</section>
-<section id="conclusiones" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="conclusiones"><span class="header-section-number">1.6</span> 🧠 Conclusiones</h2>
+<section id="parámetros-importantes" class="level3" data-number="6.0.1">
+<h3 data-number="6.0.1" class="anchored" data-anchor-id="parámetros-importantes"><span class="header-section-number">6.0.1</span> Parámetros importantes</h3>
 <ul>
-<li>Sexo y Clase son variables clave.</li>
-<li>Random Forest tiene buena capacidad predictiva.</li>
-<li>La interactividad mejora el análisis.</li>
+<li><code>ntree</code>: número de árboles</li>
+<li><code>mtry</code>: número de variables evaluadas por división</li>
+<li><code>importance</code>: calcula importancia de variables</li>
 </ul>
 <hr>
 </section>
-<section id="tecnologías-usadas" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="tecnologías-usadas"><span class="header-section-number">1.7</span> 🚀 Tecnologías usadas</h2>
+</section>
+<section id="evaluación-del-modelo" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> 7️⃣ Evaluación del modelo</h1>
+<section id="predicciones" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="predicciones"><span class="header-section-number">7.1</span> 7.1 Predicciones</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>predicciones <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_rf, test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="matriz-de-confusión" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="matriz-de-confusión"><span class="header-section-number">7.2</span> 7.2 Matriz de confusión</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(predicciones, test<span class="sc">$</span>Species)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            Reference
+Prediction   setosa versicolor virginica
+  setosa         15          0         0
+  versicolor      0         14         2
+  virginica       0          1        13
+
+Overall Statistics
+                                         
+               Accuracy : 0.9333         
+                 95% CI : (0.8173, 0.986)
+    No Information Rate : 0.3333         
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+                                         
+                  Kappa : 0.9            
+                                         
+ Mcnemar's Test P-Value : NA             
+
+Statistics by Class:
+
+                     Class: setosa Class: versicolor Class: virginica
+Sensitivity                 1.0000            0.9333           0.8667
+Specificity                 1.0000            0.9333           0.9667
+Pos Pred Value              1.0000            0.8750           0.9286
+Neg Pred Value              1.0000            0.9655           0.9355
+Prevalence                  0.3333            0.3333           0.3333
+Detection Rate              0.3333            0.3111           0.2889
+Detection Prevalence        0.3333            0.3556           0.3111
+Balanced Accuracy           1.0000            0.9333           0.9167</code></pre>
+</div>
+</div>
+<p>Aquí evaluamos:</p>
 <ul>
-<li>R</li>
-<li>Quarto</li>
-<li>Random Forest</li>
-<li>Plotly</li>
-<li>GitHub Pages</li>
+<li>Accuracy</li>
+<li>Sensitivity</li>
+<li>Specificity</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="visualización-del-error-oob" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> 8️⃣ Visualización del error OOB</h1>
+<p>Random Forest calcula error interno llamado <strong>Out Of Bag Error</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_rf,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Error OOB según número de árboles"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Interpretación:</p>
+<ul>
+<li>El error disminuye conforme aumentan los árboles</li>
+<li>Se estabiliza después de cierto punto</li>
+</ul>
+<hr>
+</section>
+<section id="importancia-de-variables" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> 9️⃣ Importancia de variables</h1>
+<section id="tabla-de-importancia" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="tabla-de-importancia"><span class="header-section-number">9.1</span> 9.1 Tabla de importancia</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">importance</span>(modelo_rf)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                setosa versicolor virginica MeanDecreaseAccuracy
+Sepal.Length  6.934691   7.991074  8.118161            11.088007
+Sepal.Width   4.949919   3.261623  4.293208             6.698262
+Petal.Length 21.523980  29.644416 26.019695            31.678495
+Petal.Width  21.194179  28.535273 30.471520            32.587023
+             MeanDecreaseGini
+Sepal.Length         8.150335
+Sepal.Width          1.582668
+Petal.Length        29.994713
+Petal.Width         29.579208</code></pre>
+</div>
+</div>
+</section>
+<section id="gráfico-de-importancia" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="gráfico-de-importancia"><span class="header-section-number">9.2</span> 9.2 Gráfico de importancia</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(modelo_rf,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">main =</span> <span class="st">"Importancia de Variables"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Interpretación:</p>
+<p>Las variables más importantes para clasificar especies son:</p>
+<ul>
+<li>Petal.Length</li>
+<li>Petal.Width</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="visualización-de-fronteras-de-decisión" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> 🔟 Visualización de fronteras de decisión</h1>
+<p>Para visualizar mejor, usamos solo 2 variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(<span class="at">x =</span> Petal.Length, </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> Petal.Width, </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> Species)) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Separación natural por pétalos"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Observación:</p>
+<p>Las especies están claramente separadas por las medidas del pétalo.</p>
+<hr>
+</section>
+<section id="cómo-funciona-internamente" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> 1️⃣1️⃣ ¿Cómo funciona internamente?</h1>
+<section id="paso-1-bootstrap" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="paso-1-bootstrap"><span class="header-section-number">11.1</span> Paso 1: Bootstrap</h2>
+<p>Cada árbol usa una muestra aleatoria con reemplazo.</p>
+</section>
+<section id="paso-2-selección-aleatoria-de-variables" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="paso-2-selección-aleatoria-de-variables"><span class="header-section-number">11.2</span> Paso 2: Selección aleatoria de variables</h2>
+<p>En cada nodo:</p>
+<ul>
+<li>Se eligen aleatoriamente <code>mtry</code> variables</li>
+<li>Se busca la mejor división entre esas</li>
+</ul>
+</section>
+<section id="paso-3-votación" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="paso-3-votación"><span class="header-section-number">11.3</span> Paso 3: Votación</h2>
+<p>Clasificación: - Gana la clase con más votos</p>
+<p>Regresión: - Se promedian los valores</p>
+<hr>
+</section>
+</section>
+<section id="ventajas-y-desventajas" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> 1️⃣2️⃣ Ventajas y desventajas</h1>
+<section id="ventajas" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="ventajas"><span class="header-section-number">12.1</span> Ventajas</h2>
+<p>✔ Alta precisión<br>
+✔ Maneja datos no lineales<br>
+✔ No requiere normalización<br>
+✔ Calcula importancia</p>
+</section>
+<section id="desventajas" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="desventajas"><span class="header-section-number">12.2</span> Desventajas</h2>
+<p>✘ Puede ser más lento<br>
+✘ Menos interpretable que un árbol simple</p>
+<hr>
+</section>
+</section>
+<section id="comparación-con-árbol-de-decisión" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> 1️⃣3️⃣ Comparación con Árbol de Decisión</h1>
+<p>Un árbol solo:</p>
+<ul>
+<li>Alta varianza</li>
+<li>Se sobreajusta</li>
+</ul>
+<p>Random Forest:</p>
+<ul>
+<li>Reduce varianza</li>
+<li>Generaliza mejor</li>
+</ul>
+<hr>
+</section>
+<section id="ejemplo-con-más-árboles" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> 1️⃣4️⃣ Ejemplo con más árboles</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>modelo_rf_1000 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Species <span class="sc">~</span> ., </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">data =</span> train,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">ntree =</span> <span class="dv">1000</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_rf_1000,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Error con 1000 árboles"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Observa cómo el error se estabiliza.</p>
+<hr>
+</section>
+<section id="aplicaciones-reales" class="level1" data-number="15">
+<h1 data-number="15"><span class="header-section-number">15</span> 1️⃣5️⃣ Aplicaciones reales</h1>
+<p>Random Forest se usa en:</p>
+<ul>
+<li>🏥 Medicina (diagnóstico)</li>
+<li>💳 Fraude financiero</li>
+<li>📈 Predicción de ventas</li>
+<li>🌎 Clasificación satelital</li>
+<li>🏠 Predicción de precios de vivienda</li>
+</ul>
+<hr>
+</section>
+<section id="resumen-final" class="level1" data-number="16">
+<h1 data-number="16"><span class="header-section-number">16</span> 1️⃣6️⃣ Resumen Final</h1>
+<p>Random Forest:</p>
+<ul>
+<li>Es un modelo ensemble</li>
+<li>Usa múltiples árboles</li>
+<li>Reduce sobreajuste</li>
+<li>Es robusto y potente</li>
+<li>Permite medir importancia</li>
+</ul>
+<p>Es uno de los algoritmos más usados en Machine Learning clásico.</p>
+<hr>
+</section>
+<section id="próxima-clase" class="level1" data-number="17">
+<h1 data-number="17"><span class="header-section-number">17</span> 📌 Próxima clase</h1>
+<p>Podemos continuar con:</p>
+<ul>
+<li>🔥 Gradient Boosting</li>
+<li>🚀 XGBoost</li>
+<li>📊 Random Forest para regresión</li>
+<li>🧠 Comparación con SVM</li>
 </ul>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

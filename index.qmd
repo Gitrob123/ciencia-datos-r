@@ -1,133 +1,323 @@
 ---
-title: "Análisis Interactivo del Titanic"
-toc: true
-toc-depth: 3
-number-sections: true
-code-fold: true
+title: "Random Forest en R — Clase Completa"
+format: 
+  html:
+    toc: true
+    toc-location: right
+    toc-depth: 3
 ---
 
-# 🚢 Análisis del Titanic con Random Forest
+# 🌲 Random Forest en R
 
-En esta página exploramos el dataset Titanic y construimos un modelo de Machine Learning (Random Forest) para predecir la supervivencia.
+## 1️⃣ ¿Qué es Random Forest?
 
-------------------------------------------------------------------------
+Random Forest es un algoritmo de **Machine Learning supervisado** basado en:
 
-## 📦 1. Cargar librerías y datos
+- 🌳 Muchos árboles de decisión
+- 🎲 Muestreo aleatorio (bootstrap)
+- 🎯 Votación mayoritaria (clasificación)
+- 📊 Promedio (regresión)
 
-```{r}
-library(tidyverse)
-library(plotly)
-library(DT)
+Pertenece a los métodos **Ensemble**, es decir, combina múltiples modelos débiles para crear uno fuerte.
 
-titanic <- as.data.frame(Titanic)
+### ¿Por qué funciona tan bien?
 
-titanic <- titanic %>%
-  uncount(Freq) %>%
-  mutate(
-    Survived = factor(Survived),
-    Sex = factor(Sex),
-    Class = factor(Class),
-    Age = factor(Age)
-  )
+Porque:
 
-datatable(head(titanic, 20),
-          options = list(pageLength = 5),
-          caption = "Vista previa del dataset Titanic")
-```
+- Reduce el **overfitting** de un árbol individual
+- Reduce la **varianza**
+- Es robusto al ruido
+- Maneja muchas variables
+- Calcula importancia de variables automáticamente
 
-------------------------------------------------------------------------
+---
 
-## 📊 2. Exploración Interactiva
-
-### Supervivencia por Clase
+# 2️⃣ Librerías necesarias
 
 ```{r}
-plot_ly(
-  titanic,
-  x = ~Class,
-  color = ~Survived,
-  type = "bar"
-) %>%
-  layout(
-    barmode = "stack",
-    title = "Supervivencia por Clase",
-    yaxis = list(title = "Conteo")
-  )
-```
+# Instalación (solo una vez)
+# install.packages("randomForest")
+# install.packages("caret")
+# install.packages("ggplot2")
+# install.packages("corrplot")
 
-------------------------------------------------------------------------
-
-## 🤖 3. Modelo Random Forest
-
-```{r}
 library(randomForest)
+library(caret)
+library(ggplot2)
+library(corrplot)
+```
 
+---
+
+# 3️⃣ Dataset: Iris
+
+Usaremos el dataset clásico `iris`.
+
+```{r}
+data(iris)
+head(iris)
+```
+
+Variables:
+
+- Sepal.Length
+- Sepal.Width
+- Petal.Length
+- Petal.Width
+- Species (variable objetivo)
+
+---
+
+# 4️⃣ Exploración de datos
+
+## 4.1 Resumen estadístico
+
+```{r}
+summary(iris)
+```
+
+## 4.2 Distribución por especie
+
+```{r}
+ggplot(iris, aes(x = Species, fill = Species)) +
+  geom_bar() +
+  theme_minimal() +
+  ggtitle("Cantidad de observaciones por especie")
+```
+
+## 4.3 Matriz de correlación
+
+```{r}
+cor_matrix <- cor(iris[,1:4])
+corrplot(cor_matrix, method = "color", addCoef.col = "black")
+```
+
+Observación:
+Petal.Length y Petal.Width están fuertemente correlacionadas.
+
+---
+
+# 5️⃣ División entrenamiento y prueba
+
+Dividimos en 70% entrenamiento y 30% prueba.
+
+```{r}
 set.seed(123)
 
-train_index <- sample(1:nrow(titanic), 0.7*nrow(titanic))
-train <- titanic[train_index, ]
-test  <- titanic[-train_index, ]
+trainIndex <- createDataPartition(iris$Species, 
+                                   p = 0.7, 
+                                   list = FALSE)
 
-rf_model <- randomForest(
-  Survived ~ Class + Sex + Age,
-  data = train,
-  ntree = 200,
-  importance = TRUE
-)
-
-rf_model
+train <- iris[trainIndex, ]
+test  <- iris[-trainIndex, ]
 ```
 
-------------------------------------------------------------------------
+---
 
-## 📈 4. Importancia de Variables
+# 6️⃣ Entrenamiento del modelo Random Forest
 
 ```{r}
-importance_df <- as.data.frame(importance(rf_model))
-importance_df$Variable <- rownames(importance_df)
+set.seed(123)
 
-plot_ly(
-  importance_df,
-  x = ~MeanDecreaseGini,
-  y = ~reorder(Variable, MeanDecreaseGini),
-  type = "bar",
-  orientation = "h"
-) %>%
-  layout(
-    title = "Importancia de Variables",
-    xaxis = list(title = "Mean Decrease Gini"),
-    yaxis = list(title = "")
-  )
+modelo_rf <- randomForest(Species ~ ., 
+                          data = train,
+                          ntree = 500,
+                          mtry = 2,
+                          importance = TRUE)
+
+modelo_rf
 ```
 
-------------------------------------------------------------------------
+### Parámetros importantes
 
-## 🎯 5. Evaluación del Modelo
+- `ntree`: número de árboles
+- `mtry`: número de variables evaluadas por división
+- `importance`: calcula importancia de variables
+
+---
+
+# 7️⃣ Evaluación del modelo
+
+## 7.1 Predicciones
 
 ```{r}
-pred <- predict(rf_model, newdata = test)
-
-conf_matrix <- table(Predicho = pred,
-                     Real = test$Survived)
-
-datatable(as.data.frame(conf_matrix),
-          caption = "Matriz de Confusión")
+predicciones <- predict(modelo_rf, test)
 ```
 
-------------------------------------------------------------------------
+## 7.2 Matriz de confusión
 
-## 🧠 Conclusiones
+```{r}
+confusionMatrix(predicciones, test$Species)
+```
 
--   Sexo y Clase son variables clave.
--   Random Forest tiene buena capacidad predictiva.
--   La interactividad mejora el análisis.
+Aquí evaluamos:
 
-------------------------------------------------------------------------
+- Accuracy
+- Sensitivity
+- Specificity
 
-## 🚀 Tecnologías usadas
+---
 
--   R
--   Quarto
--   Random Forest
--   Plotly
--   GitHub Pages
+# 8️⃣ Visualización del error OOB
+
+Random Forest calcula error interno llamado **Out Of Bag Error**.
+
+```{r}
+plot(modelo_rf,
+     main = "Error OOB según número de árboles")
+```
+
+Interpretación:
+
+- El error disminuye conforme aumentan los árboles
+- Se estabiliza después de cierto punto
+
+---
+
+# 9️⃣ Importancia de variables
+
+## 9.1 Tabla de importancia
+
+```{r}
+importance(modelo_rf)
+```
+
+## 9.2 Gráfico de importancia
+
+```{r}
+varImpPlot(modelo_rf,
+           main = "Importancia de Variables")
+```
+
+Interpretación:
+
+Las variables más importantes para clasificar especies son:
+
+- Petal.Length
+- Petal.Width
+
+---
+
+# 🔟 Visualización de fronteras de decisión
+
+Para visualizar mejor, usamos solo 2 variables.
+
+```{r}
+library(ggplot2)
+
+ggplot(iris, aes(x = Petal.Length, 
+                 y = Petal.Width, 
+                 color = Species)) +
+  geom_point(size = 3) +
+  theme_minimal() +
+  ggtitle("Separación natural por pétalos")
+```
+
+Observación:
+
+Las especies están claramente separadas por las medidas del pétalo.
+
+---
+
+# 1️⃣1️⃣ ¿Cómo funciona internamente?
+
+## Paso 1: Bootstrap
+
+Cada árbol usa una muestra aleatoria con reemplazo.
+
+## Paso 2: Selección aleatoria de variables
+
+En cada nodo:
+
+- Se eligen aleatoriamente `mtry` variables
+- Se busca la mejor división entre esas
+
+## Paso 3: Votación
+
+Clasificación:
+- Gana la clase con más votos
+
+Regresión:
+- Se promedian los valores
+
+---
+
+# 1️⃣2️⃣ Ventajas y desventajas
+
+## Ventajas
+
+✔ Alta precisión  
+✔ Maneja datos no lineales  
+✔ No requiere normalización  
+✔ Calcula importancia  
+
+## Desventajas
+
+✘ Puede ser más lento  
+✘ Menos interpretable que un árbol simple  
+
+---
+
+# 1️⃣3️⃣ Comparación con Árbol de Decisión
+
+Un árbol solo:
+
+- Alta varianza
+- Se sobreajusta
+
+Random Forest:
+
+- Reduce varianza
+- Generaliza mejor
+
+---
+
+# 1️⃣4️⃣ Ejemplo con más árboles
+
+```{r}
+modelo_rf_1000 <- randomForest(Species ~ ., 
+                               data = train,
+                               ntree = 1000)
+
+plot(modelo_rf_1000,
+     main = "Error con 1000 árboles")
+```
+
+Observa cómo el error se estabiliza.
+
+---
+
+# 1️⃣5️⃣ Aplicaciones reales
+
+Random Forest se usa en:
+
+- 🏥 Medicina (diagnóstico)
+- 💳 Fraude financiero
+- 📈 Predicción de ventas
+- 🌎 Clasificación satelital
+- 🏠 Predicción de precios de vivienda
+
+---
+
+# 1️⃣6️⃣ Resumen Final
+
+Random Forest:
+
+- Es un modelo ensemble
+- Usa múltiples árboles
+- Reduce sobreajuste
+- Es robusto y potente
+- Permite medir importancia
+
+Es uno de los algoritmos más usados en Machine Learning clásico.
+
+---
+
+# 📌 Próxima clase
+
+Podemos continuar con:
+
+- 🔥 Gradient Boosting
+- 🚀 XGBoost
+- 📊 Random Forest para regresión
+- 🧠 Comparación con SVM
