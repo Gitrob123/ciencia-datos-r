@@ -4,20 +4,12 @@ project:
 
 website:
   title: "ciencia-datos-r"
-
   navbar:
     left:
       - href: index.qmd
         text: Home
       - href: about.qmd
         text: About
-
-  sidebar:
-    style: docked
-    search: true
-    contents:
-      - index.qmd
-      - about.qmd
 
 format:
   html:
@@ -26,7 +18,8 @@ format:
       - brand
     css: styles.css
     toc: true
-    toc-location: left
+    toc-location: right
+    toc-depth: 3
     number-sections: true
 
 editor: visual
