@@ -4,6 +4,7 @@ format:
   html:
     theme: cosmo
     toc: true
+    toc-depth: 3
     code-fold: true
 ---
 
@@ -16,15 +17,12 @@ En esta página exploramos el dataset Titanic y construimos un modelo de Machine
 ## 📦 1. Cargar librerías y datos
 
 ```{r}
-# Librerías
 library(tidyverse)
 library(plotly)
 library(DT)
 
-# Cargar dataset Titanic
 titanic <- as.data.frame(Titanic)
 
-# Expandir frecuencias
 titanic <- titanic %>%
   uncount(Freq) %>%
   mutate(
@@ -34,7 +32,6 @@ titanic <- titanic %>%
     Age = factor(Age)
   )
 
-# Vista previa interactiva
 datatable(head(titanic, 20),
           options = list(pageLength = 5),
           caption = "Vista previa del dataset Titanic")
@@ -44,17 +41,13 @@ datatable(head(titanic, 20),
 
 ## 📊 2. Exploración Interactiva
 
-### Supervivencia por Clase y Sexo
+### Supervivencia por Clase
 
 ```{r}
-# Gráfico interactivo con plotly nativo
-library(plotly)
-
 plot_ly(
   titanic,
   x = ~Class,
   color = ~Survived,
-  colors = c("#1f77b4", "#ff7f0e"),
   type = "bar"
 ) %>%
   layout(
@@ -73,12 +66,10 @@ library(randomForest)
 
 set.seed(123)
 
-# División train/test
 train_index <- sample(1:nrow(titanic), 0.7*nrow(titanic))
 train <- titanic[train_index, ]
 test  <- titanic[-train_index, ]
 
-# Modelo
 rf_model <- randomForest(
   Survived ~ Class + Sex + Age,
   data = train,
@@ -105,7 +96,7 @@ plot_ly(
   orientation = "h"
 ) %>%
   layout(
-    title = "Importancia de Variables (Random Forest)",
+    title = "Importancia de Variables",
     xaxis = list(title = "Mean Decrease Gini"),
     yaxis = list(title = "")
   )
@@ -129,18 +120,16 @@ datatable(as.data.frame(conf_matrix),
 
 ## 🧠 Conclusiones
 
-🔹 Sexo y Clase son las variables más importantes.\
-🔹 Random Forest logra buena capacidad predictiva.\
-🔹 Los gráficos interactivos permiten explorar mejor los datos.
+-   Sexo y Clase son variables clave.
+-   Random Forest tiene buena capacidad predictiva.
+-   La interactividad mejora el análisis.
 
 ------------------------------------------------------------------------
 
 ## 🚀 Tecnologías usadas
 
--   R\
--   Quarto\
--   Random Forest\
--   Plotly\
+-   R
+-   Quarto
+-   Random Forest
+-   Plotly
 -   GitHub Pages
-
-Este sitio está publicado automáticamente usando Git + GitHub Pages.
