@@ -1,11 +1,146 @@
 ---
-title: "ciencia-datos-r"
+title: "Análisis Interactivo del Titanic"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: true
 ---
 
-This is a Quarto website.
+# 🚢 Análisis del Titanic con Random Forest
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+En esta página exploramos el dataset Titanic y construimos un modelo de Machine Learning (Random Forest) para predecir la supervivencia.
+
+------------------------------------------------------------------------
+
+## 📦 1. Cargar librerías y datos
 
 ```{r}
-1 + 1
+# Librerías
+library(tidyverse)
+library(plotly)
+library(DT)
+
+# Cargar dataset Titanic
+titanic <- as.data.frame(Titanic)
+
+# Expandir frecuencias
+titanic <- titanic %>%
+  uncount(Freq) %>%
+  mutate(
+    Survived = factor(Survived),
+    Sex = factor(Sex),
+    Class = factor(Class),
+    Age = factor(Age)
+  )
+
+# Vista previa interactiva
+datatable(head(titanic, 20),
+          options = list(pageLength = 5),
+          caption = "Vista previa del dataset Titanic")
 ```
+
+------------------------------------------------------------------------
+
+## 📊 2. Exploración Interactiva
+
+### Supervivencia por Clase y Sexo
+
+```{r}
+# Gráfico interactivo con plotly nativo
+library(plotly)
+
+plot_ly(
+  titanic,
+  x = ~Class,
+  color = ~Survived,
+  colors = c("#1f77b4", "#ff7f0e"),
+  type = "bar"
+) %>%
+  layout(
+    barmode = "stack",
+    title = "Supervivencia por Clase",
+    yaxis = list(title = "Conteo")
+  )
+```
+
+------------------------------------------------------------------------
+
+## 🤖 3. Modelo Random Forest
+
+```{r}
+library(randomForest)
+
+set.seed(123)
+
+# División train/test
+train_index <- sample(1:nrow(titanic), 0.7*nrow(titanic))
+train <- titanic[train_index, ]
+test  <- titanic[-train_index, ]
+
+# Modelo
+rf_model <- randomForest(
+  Survived ~ Class + Sex + Age,
+  data = train,
+  ntree = 200,
+  importance = TRUE
+)
+
+rf_model
+```
+
+------------------------------------------------------------------------
+
+## 📈 4. Importancia de Variables
+
+```{r}
+importance_df <- as.data.frame(importance(rf_model))
+importance_df$Variable <- rownames(importance_df)
+
+plot_ly(
+  importance_df,
+  x = ~MeanDecreaseGini,
+  y = ~reorder(Variable, MeanDecreaseGini),
+  type = "bar",
+  orientation = "h"
+) %>%
+  layout(
+    title = "Importancia de Variables (Random Forest)",
+    xaxis = list(title = "Mean Decrease Gini"),
+    yaxis = list(title = "")
+  )
+```
+
+------------------------------------------------------------------------
+
+## 🎯 5. Evaluación del Modelo
+
+```{r}
+pred <- predict(rf_model, newdata = test)
+
+conf_matrix <- table(Predicho = pred,
+                     Real = test$Survived)
+
+datatable(as.data.frame(conf_matrix),
+          caption = "Matriz de Confusión")
+```
+
+------------------------------------------------------------------------
+
+## 🧠 Conclusiones
+
+🔹 Sexo y Clase son las variables más importantes.\
+🔹 Random Forest logra buena capacidad predictiva.\
+🔹 Los gráficos interactivos permiten explorar mejor los datos.
+
+------------------------------------------------------------------------
+
+## 🚀 Tecnologías usadas
+
+-   R\
+-   Quarto\
+-   Random Forest\
+-   Plotly\
+-   GitHub Pages
+
+Este sitio está publicado automáticamente usando Git + GitHub Pages.
